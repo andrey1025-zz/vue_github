@@ -11,3 +11,12 @@ As a user, in the details screen I can click on the username and profile image, 
 Definition of ready
 
 The project must be implemented according to the Zeplin specifications, it is not mandatory to use a framework, but we recommend Vue. The use of paths is mandatory (Ex: / users / {username} / repos).
+
+Deploy a client application, view the GitHub API, and view the repositories for a specific user.
+This application must work in the most recent browsers on the market.
+API
+https://developer.github.com/v3/
+Details points of a user:
+https://api.github.com/users/[username}
+User repositories:
+https://api.github.com/users/[username-lex.europa.eu/repos
