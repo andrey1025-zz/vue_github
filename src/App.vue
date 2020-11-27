@@ -1,20 +1,23 @@
 <template>
   <div id="app">
-    <div class="container" v-if="searchStart">
-      <user_data :info="info" :repos="repos" :username="username" v-if="showUserDetail"/>
-    </div>
-    <div class="home-wrapper" v-if="!searchStart">
-      <div class="form-group">
-        <label class="control-label page-title"><strong>Github</strong> <i>Search</i></label>
-        <div class="input-group">
+    <div class="container">
+      <div class="form-group row">
+        <label class="control-label col-sm-3 page-title text-left" for="username"><strong>Github</strong> <i>Search</i></label>
+        <div class="col-sm-9 input-group">
           <input type="text" class="form-control" id="username" placeholder="Enter github username" v-model="username" v-on:keyup="enterKey">
           <div class="input-group-append">
-            <button class="btn btn-pink" type="button" v-on:click="start">
+            <button class="btn btn-pink" type="submit">
               <i class="fa fa-search"></i>
             </button>
           </div>
         </div>
       </div>
+      <div class="search-result">
+        <div class="empty-user" v-if="isEmpty">
+          <h1 class="pink">User not found :(</h1>
+        </div>
+      </div>
+      <user_data :info="info" :repos="repos" v-if="showUserDetail && !isEmpty"/>
     </div>
   </div>
 </template>
@@ -32,19 +35,40 @@ export default {
       username : "",
       info:{},
       repos : [],
-      showUserDetail:false,
-      searchStart:false
+      isEmpty:false,
+      showUserDetail:false
     }
   },
   methods:{
-    async start(){
-    this.showUserDetail = true
-    this.searchStart = true;
-
+    async searchGithubUser(){
+      var userInfoUrl = "https://api.github.com/users/" + this.username
+      var userReposUrl = "https://api.github.com/users/" + this.username + "/repos"
+      try {
+        const userInfo = await fetch(userInfoUrl, {
+          method: 'GET',
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        })
+        const data = await userInfo.json()
+        if(data.avatar_url){
+          this.info = data
+          const userRepos = await fetch(userReposUrl, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/vnd.github.mercy-preview+json; charset=UTF-8' },
+          })
+          const repos = await userRepos.json()
+          this.repos = repos
+          this.showUserDetail = true
+          this.isEmpty = false
+        } else{
+          this.isEmpty = true
+        }
+      } catch (error) {
+        console.error(error)
+      }
     },
     enterKey:function(e){
       if(e.keyCode == 13){
-        this.start()
+        this.searchGithubUser()
       }
     }
   }
@@ -84,9 +108,5 @@ export default {
 }
 .btn-pink{
   background-color: #ac53f2 !important;
-}
-.home-wrapper{
-  width:600px;
-  margin:0px auto;
 }
 </style>
