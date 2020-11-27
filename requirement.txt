@@ -1,0 +1,13 @@
+Navigation
+When searching for a user by github search login, go to the search results page with the user's details, otherwise it will show the Not Found page (Layout NotFound).
+
+Requirements
+As a user, I want to search for a GitHub user;
+As a user, I want to see the details of that user who was searched (number of followers, avatar image, email and bio);
+As a user, I can do a new search on the details screen;
+As a user, I want to see the list of repositories of that user who was searched, ordered by the decreasing number of stars;
+As a user, in the details screen I can click on the repository name and go to the repository screen on github;
+As a user, in the details screen I can click on the username and profile image, and go to the profile screen on github;
+Definition of ready
+
+The project must be implemented according to the Zeplin specifications, it is not mandatory to use a framework, but we recommend Vue. The use of paths is mandatory (Ex: / users / {username} / repos).
